@@ -23,15 +23,11 @@ class PaymentApi extends BaseController
         return $this->respond($dataPayment, 200);
     }
 
-    public function showPaidOffByMonth($month, $year)
-    {
-        $dataPayment = $this->payment_order_model->getAllDataPaidOff($month, $year, false);
-        return $this->respond($dataPayment, 200);
-    }
 
-    public function showAllPaidOff()
+
+    public function showPaidOff($type = "", $month = "", $year = "")
     {
-        $dataPayment = $this->payment_order_model->getAllDataPaidOff("", "", true);
+        $dataPayment = $this->payment_order_model->getDataPaidOff($type, $month, $year);
         return $this->respond($dataPayment, 200);
     }
 

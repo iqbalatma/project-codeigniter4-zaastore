@@ -112,11 +112,16 @@ $routes->post('/installer-report-installation', 'Installer::report_installation'
 // PAYMENT API
 $routes->get('/api/payment/(:any)', 'RESTAPI\PaymentApi::show/$1');
 $routes->get('/api/payment-left/(:any)', 'RESTAPI\PaymentApi::paymentLeft/$1');
-$routes->get('/api/payment-by-month/(:any)/(:any)/(:any)', 'RESTAPI\PaymentApi::showPaidOffByMonth/$1/$2/$3');
-$routes->get('/api/payment-all-paid-off', 'RESTAPI\PaymentApi::showAllPaidOff');
+
+$routes->get('/api/payment-paid-off/(:any)/(:any)/(:any)', 'RESTAPI\PaymentApi::showPaidOff/$1/$2/$3');
+$routes->get('/api/payment-paid-off/(:any)', 'RESTAPI\PaymentApi::showPaidOff/$1');
 
 
-$routes->get('/api/technician-all-progress', 'RESTAPI\TechnicianApi::showTechnicianOnProgress');
+// TECHNICIAN
+$routes->get('/api/technician-progress', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician'); //on progress
+$routes->get('/api/technician-done/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1'); //done all / this month
+$routes->get('/api/technician-all-done-monthly/(:any)/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1/$2/$3'); //done monthly
+
 $routes->get('/api/technician-name/(:any)', 'RESTAPI\TechnicianApi::showTechnicianName/$1');
 
 

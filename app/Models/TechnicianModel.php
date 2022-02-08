@@ -18,9 +18,9 @@ class TechnicianModel extends Model
 
 
     public function getAllDataOrder(
+        $type = "on-progress",
         $month = "",
-        $year = "",
-        $type = "onprogress"
+        $year = ""
     ) {
         if ($month == "" && $year == "") {
             date_default_timezone_set('Asia/Jakarta');
@@ -35,22 +35,13 @@ class TechnicianModel extends Model
         $builder->where('order_list.id_technician is NOT NULL', NULL, FALSE);
         $builder->where('order_list.is_deleted', 0);
 
-        $builder = $this->db->table($this->table);
-        $builder->select('order_list.*, users.fullname, status.status_name');
-        $builder->join('users', $this->table . '.id_user = users.id_user');
-        $builder->join('status', $this->table . '.id_status = status.id_status');
-        $builder->orderBy('deadline', 'ASC');
-        $builder->where('order_list.id_technician is NOT NULL', NULL, FALSE);
-
-
-
-        if ($type == "onprogress") {
+        if ($type == "on-progress") {
             $builder->where('order_list.id_status = 1', NULL, FALSE);
-        } elseif ($type == "doneall") {
+        } elseif ($type == "all") {
             $builder->where('order_list.date_production_done is NOT NULL', NULL, FALSE);
             $builder->where('order_list.id_status != 1', NULL, FALSE);
             $builder->where('order_list.id_status != 5', NULL, FALSE);
-        } else {
+        } elseif ($type == "monthly") {
             $builder->where('order_list.id_status != 1', NULL, FALSE);
             $builder->where('MONTH(order_list.date_production_done)', $month);
             $builder->where('YEAR(order_list.date_production_done)', $year);

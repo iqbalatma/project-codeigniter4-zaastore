@@ -18,7 +18,7 @@ class Payment extends BaseController
             return redirect()->to("HttpRequest");
         }
 
-        $order_data = $this->payment_order_model->getAllDataPaidOff(getMonthNow(), getYearNow(), false);
+        $order_data = $this->payment_order_model->getDataPaidOff("monthly", getMonthNow(), getYearNow());
 
         $flashdata = null;
         if ($this->session->getFlashdata('msg') !== null) {

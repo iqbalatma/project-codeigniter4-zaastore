@@ -18,9 +18,13 @@ class TechnicianApi extends BaseController
         $this->user_model = new \App\Models\UsersModel();
     }
 
-    public function showTechnicianOnProgress()
+    public function showDataOrderOnTechnician($type = "on-progress", $month = "", $year = "")
     {
-        $dataTechnician = $this->technician_model->getAllDataOrder();
+        // on-progress
+        // done-all
+        // done-monthly (this month)
+        // done-monthly (by filter)
+        $dataTechnician = $this->technician_model->getAllDataOrder($type, $month, $year);
         return $this->respond($dataTechnician, 200);
     }
 
