@@ -28,9 +28,21 @@ class TechnicianApi extends BaseController
         return $this->respond($dataTechnician, 200);
     }
 
+    public function showDataOrderByTechnicianId($type, $idTechnician, $month = "", $year = "")
+    {
+        $dataTechnician = $this->technician_model->getAllDataOrderByUserId($type, $idTechnician, $month, $year);
+        return $this->respond($dataTechnician, 200);
+    }
+
     public function showTechnicianName($idTechnician)
     {
         $technician_name = $this->user_model->get_technician($idTechnician)[0]["fullname"];
         return $this->respond($technician_name, 200);
+    }
+
+    public function showAllTechnician()
+    {
+        $technicians = $this->user_model->where("id_role", 4)->findAll();
+        return $this->respond($technicians, 200);
     }
 }

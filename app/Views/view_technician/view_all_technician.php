@@ -28,6 +28,8 @@
                         </b>
                     </div>
                     <div class="card-body">
+
+                        <!-- FILTER -->
                         <div class="row mb-4" id="filter-container" style="display: none;">
                             <div class="col-xl-4 col-md-4">
                                 <select class="form-select" aria-label="Default select example" name="month" id="month-filter">
@@ -58,6 +60,8 @@
                             </div>
                         </div>
 
+
+                        <!-- TABLE -->
                         <div class="table-responsive" id="table-container">
                             <table class="table" id="myTable">
                                 <thead>
@@ -463,8 +467,8 @@
                         type: "GET",
                     }).done(function(technicianName) {
                         let dateProduction = "";
-                        if (data.data_production_done != null) {
-                            dateProduction = data.data_production_done
+                        if (data.date_production_done != null) {
+                            dateProduction = data.date_production_done
                         }
                         let additionalItems = "";
                         if (data.waterproof != null) {

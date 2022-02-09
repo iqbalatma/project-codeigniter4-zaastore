@@ -52,35 +52,12 @@ class TechnicianModel extends Model
     }
 
 
-    public function getDataOrderForTechnicianDoneThisMonth($id_technician, $month, $year)
+    public function getAllDataOrderByUserId($type = "all", $id_technician, $month = "", $year = "")
     {
-        if (
-            $month == "" && $year == ""
-        ) {
-            date_default_timezone_set('Asia/Jakarta');
-            $year = date('Y', time());
-            $month = date('m', time());
+        if ($month == "" && $year == "") {
+            $month = getMonthNow();
+            $year = getYearNow();
         }
-        $builder = $this->db->table($this->table);
-        $builder->select('order_list.*, users.fullname, status.status_name');
-        $builder->join('users', $this->table . '.id_user = users.id_user');
-        $builder->join(
-            'status',
-            $this->table . '.id_status = status.id_status'
-        );
-        $builder->orderBy('order_list.date_production_done', 'ASC');
-        $builder->where('order_list.id_technician', $id_technician); //hardcode harusnya id teknisi dari sesi
-        $builder->where('order_list.id_status != 1', NULL, FALSE);
-        $builder->where('MONTH(order_list.date_production_done)', $month);
-        $builder->where('YEAR(order_list.date_production_done)', $year);
-        $builder->where('order_list.date_production_done is NOT NULL', NULL, FALSE);
-        $builder->where('order_list.is_deleted', 0);
-        $query = $builder->get()->getResultArray();
-        return $query;
-    }
-
-    public function getDataOrderForTechnicianDone($id_technician)
-    {
         $builder = $this->db->table($this->table);
         $builder->select('order_list.*, users.fullname, status.status_name');
         $builder->join('users', $this->table . '.id_user = users.id_user');
@@ -90,6 +67,10 @@ class TechnicianModel extends Model
         $builder->where('order_list.id_status != 1', NULL, FALSE);
         $builder->where('order_list.date_production_done is NOT NULL', NULL, FALSE);
         $builder->where('order_list.is_deleted', 0);
+        if ($type == "monthly") {
+            $builder->where('MONTH(order_list.date_production_done)', $month);
+            $builder->where('YEAR(order_list.date_production_done)', $year);
+        }
         $query = $builder->get()->getResultArray();
         return $query;
     }
