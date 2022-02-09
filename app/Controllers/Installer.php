@@ -90,44 +90,36 @@ class Installer extends BaseController
         return view('view_installer/view_by_installer', $data);
     }
 
-    public function all_installer($data_type = "on-progress")
+    public function all_installer()
     {
-        if ($_SESSION["role"] == 3 || $_SESSION["role"] == 4 || $_SESSION["role"] == 7) {
+        $roleId = $_SESSION["role"];
+        if ($roleId == 3 || $roleId == 4 || $roleId == 7) {
             return redirect()->to("HttpRequest");
         }
-        $month = "";
-        $year = "";
-        if ($this->request->getGet("year") !== null) {
-            $year = $this->request->getGet("year");
-        }
-        if ($this->request->getGet("month") !== null) {
-            $month = $this->request->getGet("month");
-        }
-
-
-        switch ($data_type) {
-            case "on-progress":
-                $installer = $this->installation_model->getAllDataOrderForInstallerOnProgress();
-                $checked_button = "<script>
-    radiobtn = document.getElementById('btnradio1');
-    radiobtn.checked = true;
-</script>";
-                break;
-            case "done-all":
-                $installer = $this->installation_model->getAllDataOrderForInstallerDone();
-                $checked_button = "<script>
-    radiobtn = document.getElementById('btnradio2');
-    radiobtn.checked = true;
-</script>";
-                break;
-            case "done-this-month":
-                $installer = $this->installation_model->getAllDataOrderForInstallerDoneThisMonth($month, $year);
-                $checked_button = "<script>
-    radiobtn = document.getElementById('btnradio2');
-    radiobtn.checked = true;
-</script>";
-                break;
-        }
+        $installer = $this->installation_model->getAllDataOrder();
+        //         switch ($data_type) {
+        //             case "on-progress":
+        //                 $installer = $this->installation_model->getAllDataOrderForInstallerOnProgress();
+        //                 $checked_button = "<script>
+        //     radiobtn = document.getElementById('btnradio1');
+        //     radiobtn.checked = true;
+        // </script>";
+        //                 break;
+        //             case "done-all":
+        //                 $installer = $this->installation_model->getAllDataOrderForInstallerDone();
+        //                 $checked_button = "<script>
+        //     radiobtn = document.getElementById('btnradio2');
+        //     radiobtn.checked = true;
+        // </script>";
+        //                 break;
+        //             case "done-this-month":
+        //                 $installer = $this->installation_model->getAllDataOrderForInstallerDoneThisMonth($month, $year);
+        //                 $checked_button = "<script>
+        //     radiobtn = document.getElementById('btnradio2');
+        //     radiobtn.checked = true;
+        // </script>";
+        //                 break;
+        //         }
 
         $flashdata = null;
         if ($this->session->getFlashdata('msg') !== null) {
@@ -140,9 +132,7 @@ class Installer extends BaseController
             "session" => $this->session->get(),
             "installer" => $installer,
             "user_technician" => $this->users_model,
-            "checked_button" => $checked_button,
-            "data_type" => $data_type,
-            "installer_user" => $this->users_model->where("id_role", 4)->where("is_deleted", 0)->findAll(),
+            "listInstaller" => $this->users_model->where("id_role", 4)->where("is_deleted", 0)->findAll(),
         ];
 
 
