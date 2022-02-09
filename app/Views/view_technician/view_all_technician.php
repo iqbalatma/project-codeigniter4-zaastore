@@ -20,43 +20,6 @@
                     <button class="btn btn-outline-primary" id="btn-done" for="cb-done">Sudah Selesai</button>
                 </div>
 
-
-                <?php if ($data_type == "done-this-month" || $data_type == "done-all") {
-
-                ?>
-                    <div class="row mb-4">
-                        <div class="col-xl-4 col-md-4">
-                            <select class="form-select" aria-label="Default select example" name="month" id="month-filter">
-                                <option selected disabled>Pilih Bulan Untuk Filter</option>
-                                <?php foreach (getMonthList() as $key => $value) {
-                                ?>
-                                    <option value="<?= $key + 1 ?>"><?= $value ?></option>
-                                <?php
-                                } ?>
-                            </select>
-                        </div>
-                        <div class="col-xl-4 col-md-4">
-                            <select class="form-select" aria-label="Default select example" name="year" id="year-filter">
-                                <option selected disabled>Pilih Tahun Untuk Filter</option>
-                                <?php $counter_year = 2021;
-                                while ($counter_year < 2030) {
-                                ?>
-                                    <option value="<?= $counter_year; ?>"><?= $counter_year; ?></option>
-                                <?php
-                                    $counter_year++;
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-xl-4 col-md-4">
-                            <button class="btn btn-primary" id="btn-filter" type="button">Filter</button>
-                            <button class="btn btn-primary" id="btn-all-paid-off" type="button">Tampilkan Semua Data</button>
-                        </div>
-                    </div>
-
-                <?php }; ?>
-
-
                 <div class="card">
                     <div class="card-header">
                         <i class="fas fa-tools"></i>
@@ -65,6 +28,40 @@
                         </b>
                     </div>
                     <div class="card-body">
+
+                        <!-- FILTER -->
+                        <div class="row mb-4" id="filter-container" style="display: none;">
+                            <div class="col-xl-4 col-md-4">
+                                <select class="form-select" aria-label="Default select example" name="month" id="month-filter">
+                                    <option selected disabled>Pilih Bulan Untuk Filter</option>
+                                    <?php foreach (getMonthList() as $key => $value) {
+                                    ?>
+                                        <option value="<?= $key + 1 ?>"><?= $value ?></option>
+                                    <?php
+                                    } ?>
+                                </select>
+                            </div>
+                            <div class="col-xl-4 col-md-4">
+                                <select class="form-select" aria-label="Default select example" name="year" id="year-filter">
+                                    <option selected disabled>Pilih Tahun Untuk Filter</option>
+                                    <?php $counter_year = 2021;
+                                    while ($counter_year < 2030) {
+                                    ?>
+                                        <option value="<?= $counter_year; ?>"><?= $counter_year; ?></option>
+                                    <?php
+                                        $counter_year++;
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="col-xl-4 col-md-4">
+                                <button class="btn btn-primary" id="btn-filter" type="button">Filter</button>
+                                <button class="btn btn-primary" id="btn-all-done" type="button">Tampilkan Semua Data</button>
+                            </div>
+                        </div>
+
+
+                        <!-- TABLE -->
                         <div class="table-responsive" id="table-container">
                             <table class="table" id="myTable">
                                 <thead>
@@ -195,6 +192,111 @@
             modal.find("#id_order").val(idOrder);
         }
 
+        function filterDone(link) {
+            let btn = $(this);
+            let cb = $("#cb-done");
+            let cbRemove = $("#cb-on-progress").removeAttr("checked");
+            cb.prop("checked", true)
+
+
+            let rowThead = ` <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Kode Order</th>
+                                    <th scope="col">Produksi Selesai</th>
+                                    <th scope="col">Ukuran Akrilik</th>
+                                    <th scope="col">Panjang Kabel</th>
+                                    <th scope="col">Adaptor</th>
+                                    <th scope="col">Item Tambahan</th>
+                                    <th scope="col">Catatan Desain</th>
+                                    <th scope="col">Catatan Tambahan</th>
+                                    <th scope="col">Nama Teknisi</th>
+                                    <th scope="col">Harga Barang</th>
+                                    <th scope="col">Status</th>
+                                </tr>`;
+
+            $.ajax({
+                url: link,
+                type: "GET",
+            }).done(function(responseAjax) {
+                let tableContainer = $("#table-container");
+                tableContainer.children().remove();
+
+                let table = $("<table>", {
+                    class: "table",
+                    id: "myTable"
+                }).appendTo(tableContainer);
+
+
+
+
+                let thead = $("<thead>").append(rowThead).appendTo(table);
+                let tbody = $("<tbody>").appendTo(table);
+
+                let dataTable = $("#myTable").DataTable();
+
+                responseAjax.forEach((data, index) => {
+                    $.ajax({
+                        url: `/api/technician-name/` + data.id_technician,
+                        type: "GET",
+                    }).done(function(technicianName) {
+                        let dateProduction = "";
+                        if (data.date_production_done != null) {
+                            dateProduction = data.date_production_done
+                        }
+                        let additionalItems = "";
+                        if (data.waterproof != null) {
+                            additionalItems += "Waterproof, <br>";
+                        }
+                        if (data.adhesive != null) {
+                            additionalItems += `Perekat = ${data.adhesive},<br>`;
+                        }
+                        if (data.switch != null) {
+                            additionalItems += `Saklar = ${data.switch},<br>`;
+                        }
+                        if (data.laser_cut != null) {
+                            additionalItems += `Laser Cut,<br>`;
+                        }
+                        if (data.peniklan != null) {
+                            additionalItems += `Peniklan = ${data.peniklan},`;
+                        }
+
+
+
+                        let objectRow = [
+                            index + 1,
+                            data.order_code,
+                            dateProduction,
+                            data.size_acrilic,
+                            data.cable_length,
+                            data.adaptor,
+                            additionalItems,
+                            data.design_notes,
+                            data.notes,
+                            technicianName,
+                            intToRupiah(data.price),
+                            getStatusName(data.id_status),
+                        ];
+                        dataTable.row.add(objectRow).draw();
+                    });
+                })
+
+
+                if (responseAjax.length == 0) {
+                    return Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Data tidak ditemukan !',
+                    })
+                } else {
+                    return Swal.fire(
+                        'Good job!',
+                        'Filter data berhasil !',
+                        'success'
+                    )
+                }
+            });
+        }
+
         $(".btn-edit").on("click", function() {
             onClickBtnEdit(this)
         })
@@ -202,19 +304,119 @@
 
 
         $("#btn-done").on("click", function() {
+            $("#filter-container").show();
+
             let btn = $(this);
             let cb = $("#cb-done");
             let cbRemove = $("#cb-on-progress").removeAttr("checked");
             cb.prop("checked", true)
+
+
+            let rowThead = ` <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Kode Order</th>
+                                    <th scope="col">Produksi Selesai</th>
+                                    <th scope="col">Ukuran Akrilik</th>
+                                    <th scope="col">Panjang Kabel</th>
+                                    <th scope="col">Adaptor</th>
+                                    <th scope="col">Item Tambahan</th>
+                                    <th scope="col">Catatan Desain</th>
+                                    <th scope="col">Catatan Tambahan</th>
+                                    <th scope="col">Nama Teknisi</th>
+                                    <th scope="col">Harga Barang</th>
+                                    <th scope="col">Status</th>
+                                </tr>`;
+
+            $.ajax({
+                url: `/api/technician-done/monthly`,
+                type: "GET",
+            }).done(function(responseAjax) {
+                let tableContainer = $("#table-container");
+                tableContainer.children().remove();
+
+                let table = $("<table>", {
+                    class: "table",
+                    id: "myTable"
+                }).appendTo(tableContainer);
+
+
+
+
+                let thead = $("<thead>").append(rowThead).appendTo(table);
+                let tbody = $("<tbody>").appendTo(table);
+
+                let dataTable = $("#myTable").DataTable();
+
+                responseAjax.forEach((data, index) => {
+                    $.ajax({
+                        url: `/api/technician-name/` + data.id_technician,
+                        type: "GET",
+                    }).done(function(technicianName) {
+                        let dateProduction = "";
+                        if (data.date_production_done != null) {
+                            dateProduction = data.date_production_done
+                        }
+                        let additionalItems = "";
+                        if (data.waterproof != null) {
+                            additionalItems += "Waterproof, <br>";
+                        }
+                        if (data.adhesive != null) {
+                            additionalItems += `Perekat = ${data.adhesive},<br>`;
+                        }
+                        if (data.switch != null) {
+                            additionalItems += `Saklar = ${data.switch},<br>`;
+                        }
+                        if (data.laser_cut != null) {
+                            additionalItems += `Laser Cut,<br>`;
+                        }
+                        if (data.peniklan != null) {
+                            additionalItems += `Peniklan = ${data.peniklan},`;
+                        }
+
+
+
+                        let objectRow = [
+                            index + 1,
+                            data.order_code,
+                            dateProduction,
+                            data.size_acrilic,
+                            data.cable_length,
+                            data.adaptor,
+                            additionalItems,
+                            data.design_notes,
+                            data.notes,
+                            technicianName,
+                            intToRupiah(data.price),
+                            getStatusName(data.id_status),
+                        ];
+                        dataTable.row.add(objectRow).draw();
+                    });
+                })
+
+
+                if (responseAjax.length == 0) {
+                    return Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Data tidak ditemukan !',
+                    })
+                } else {
+                    return Swal.fire(
+                        'Good job!',
+                        'Filter data berhasil !',
+                        'success'
+                    )
+                }
+            });
         })
 
         $("#btn-on-progress").on("click", function() {
+            $("#filter-container").hide();
+
             let btn = $(this);
             let cb = $("#cb-on-progress");
             let cbRemove = $("#cb-done").removeAttr("checked");
             cb.prop("checked", true)
-
-
 
 
             let rowThead = ` <tr>
@@ -240,10 +442,9 @@
 
 
             $.ajax({
-                url: `/api/technician-all-progress`,
+                url: `/api/technician-progress`,
                 type: "GET",
             }).done(function(responseAjax) {
-                // console.log(responseAjax);
                 let tableContainer = $("#table-container");
                 tableContainer.children().remove();
 
@@ -266,8 +467,8 @@
                         type: "GET",
                     }).done(function(technicianName) {
                         let dateProduction = "";
-                        if (data.data_production_done != null) {
-                            dateProduction = data.data_production_done
+                        if (data.date_production_done != null) {
+                            dateProduction = data.date_production_done
                         }
                         let additionalItems = "";
                         if (data.waterproof != null) {
@@ -311,11 +512,51 @@
                         })
                     });
                 })
+
+                if (responseAjax.length == 0) {
+                    return Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Data tidak ditemukan !',
+                    })
+                } else {
+                    return Swal.fire(
+                        'Good job!',
+                        'Filter data berhasil !',
+                        'success'
+                    )
+                }
             });
 
 
 
 
+        });
+
+        $("#btn-all-done").on("click", function() {
+            filterDone(`/api/technician-done/all`);
+        });
+
+        $("#btn-filter").on("click", function() {
+            let month = $("#month-filter").val();
+            let year = $("#year-filter").val();
+
+            if (month == null) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Bulan belum dipilih !',
+                })
+            }
+            if (year == null) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Tahun belum dipilih !',
+                })
+            }
+
+            filterDone(`/api/technician-done/monthly/${month}/${year}`);
         });
     })
 </script>

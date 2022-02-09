@@ -87,8 +87,8 @@ $routes->post('/payment-transaction', 'Payment::payment_transaction');
 
 // TECHNICIAN
 $routes->get('/technician/(:any)', 'Technician::index/$1');
-$routes->get('/technician-all', 'Technician::all_technician/$1');
-$routes->get('/technician-by/(:any)', 'Technician::by_technician/$1');
+$routes->get('/technician-all', 'Technician::all_technician');
+$routes->get('/technician-by', 'Technician::by_technician');
 
 
 $routes->post('/technician-update-technician', 'Technician::update_technician');
@@ -112,12 +112,21 @@ $routes->post('/installer-report-installation', 'Installer::report_installation'
 // PAYMENT API
 $routes->get('/api/payment/(:any)', 'RESTAPI\PaymentApi::show/$1');
 $routes->get('/api/payment-left/(:any)', 'RESTAPI\PaymentApi::paymentLeft/$1');
-$routes->get('/api/payment-by-month/(:any)/(:any)/(:any)', 'RESTAPI\PaymentApi::showPaidOffByMonth/$1/$2/$3');
-$routes->get('/api/payment-all-paid-off', 'RESTAPI\PaymentApi::showAllPaidOff');
+
+$routes->get('/api/payment-paid-off/(:any)/(:any)/(:any)', 'RESTAPI\PaymentApi::showPaidOff/$1/$2/$3');
+$routes->get('/api/payment-paid-off/(:any)', 'RESTAPI\PaymentApi::showPaidOff/$1');
 
 
-$routes->get('/api/technician-all-progress', 'RESTAPI\TechnicianApi::showTechnicianOnProgress');
+// TECHNICIAN
+$routes->get('/api/technician-progress', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician'); //on progress
+$routes->get('/api/technician-done/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1'); //done all / this month
+$routes->get('/api/technician-all-done-monthly/(:any)/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1/$2/$3'); //done monthly
+
+
 $routes->get('/api/technician-name/(:any)', 'RESTAPI\TechnicianApi::showTechnicianName/$1');
+$routes->get('/api/technician-users', 'RESTAPI\TechnicianApi::showAllTechnician');
+$routes->get('/api/technician-by/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderByTechnicianId/$1/$2');
+$routes->get('/api/technician-by/(:any)/(:any)/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderByTechnicianId/$1/$2/$3/$4');
 
 
 /*

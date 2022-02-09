@@ -57,49 +57,28 @@ class Technician extends BaseController
     }
 
 
-    public function by_technician($data_type = "done-this-month")
+    public function by_technician()
     {
-        if ($_SESSION["role"] == 3 || $_SESSION["role"] == 4 || $_SESSION["role"] == 7) {
+        $roleId = $_SESSION["role"];
+        if ($roleId == 3 || $roleId == 4 || $roleId == 7) {
             return redirect()->to("HttpRequest");
         }
 
-        $month = "";
-        $year = "";
-        if ($this->request->getGet("year") !== null) {
-            $year = $this->request->getGet("year");
-        }
-        if ($this->request->getGet("month") !== null) {
-            $month = $this->request->getGet("month");
-        }
-
-
-
-        $checked_button = "";
-        $technician = [];
-
         $data_user_technician = $this->users_model->where('id_role', 4)->findAll();
-
-
 
         $data = [
             "title" => "Penugasan Teknisi",
             "content" => "view_by_technician",
             "session" => $this->session->get(),
-            "technician" => [],
             "user_technician" => $data_user_technician,
-            "name_technician" => $this->users_model,
             "order_technician" => $this->technician_model,
-            "checked_button" => $checked_button,
-            "data_type" => $data_type,
-            "month" => $month,
-            "year" => $year,
         ];
 
 
         return view('view_technician/view_by_technician', $data);
     }
 
-    public function all_technician($data_type = "on-progress")
+    public function all_technician()
     {
         $roleId = $_SESSION["role"];
         if ($roleId == 3 || $roleId == 4 || $roleId == 7) {
@@ -119,7 +98,6 @@ class Technician extends BaseController
             "session" => $this->session->get(),
             "technician" => $technician,
             "user_technician" => $this->users_model,
-            "data_type" => $data_type,
             "technician_user" => $this->users_model->where("id_role", 4)->where("is_deleted", 0)->findAll(),
             "listTechnician" => $this->users_model->where("id_role", 4)->where("is_deleted", 0)->findAll(),
         ];

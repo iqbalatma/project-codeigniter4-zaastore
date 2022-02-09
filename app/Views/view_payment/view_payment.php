@@ -352,10 +352,9 @@
              *
              */
             $.ajax({
-                url: link, //dibacanya masih string, ubah biar hanya nerima boolean
+                url: link,
                 type: "GET",
             }).done(function(responseAjax) {
-                // console.log(responseAjax);
                 let tbody = $("#table-paid-off").find("tbody");
                 tbody.children().remove();
                 let no = 1;
@@ -449,47 +448,9 @@
             });
         }
 
-        $("#btn-filter").on("click", function() {
-            let month = $("#month-filter").val();
-            let year = $("#year-filter").val();
-
-            if (month == null) {
-                return Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Bulan belum dipilih !',
-                })
-            }
-            if (year == null) {
-                return Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Tahun belum dipilih !',
-                })
-            }
-
-            filterPaidOff(`/api/payment-by-month/${month}/${year}/false`);
-        });
-
-        $("#btn-all-paid-off").on("click", function() {
-            filterPaidOff(`/api/payment-all-paid-off`);
-        });
-
-
-
-
-
-
-
-
-
-
-
-
         $(".btn-history").on("click", function() {
             onClickHistory(this);
         });
-
 
         $(".btn-add-payment").on("click", function() {
             const modal = $("#modal-add-payment");
@@ -519,6 +480,36 @@
                 }
             })
         });
+
+
+        // PAID OFF
+        $("#btn-filter").on("click", function() {
+            let month = $("#month-filter").val();
+            let year = $("#year-filter").val();
+
+            if (month == null) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Bulan belum dipilih !',
+                })
+            }
+            if (year == null) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Tahun belum dipilih !',
+                })
+            }
+
+            filterPaidOff(`/api/payment-paid-off/monthly/${month}/${year}`);
+        });
+
+        $("#btn-all-paid-off").on("click", function() {
+            filterPaidOff(`/api/payment-paid-off/all-data`);
+        });
+
+
 
 
 
