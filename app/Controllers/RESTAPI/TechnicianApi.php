@@ -34,12 +34,20 @@ class TechnicianApi extends BaseController
         return $this->respond($dataTechnician, 200);
     }
 
+
+    /**
+     * Use to get technician name by id
+     */
     public function showTechnicianName($idTechnician)
     {
         $technician_name = $this->user_model->get_technician($idTechnician)[0]["fullname"];
         return $this->respond($technician_name, 200);
     }
 
+
+    /**
+     * Use to get data technician by user 
+     */
     public function showAllTechnician()
     {
         $technicians = $this->user_model->where("id_role", 4)->findAll();

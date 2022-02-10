@@ -23,7 +23,6 @@ class TechnicianModel extends Model
         $year = ""
     ) {
         if ($month == "" && $year == "") {
-            date_default_timezone_set('Asia/Jakarta');
             $year = getYearNow();
             $month = getMonthNow();
         }
