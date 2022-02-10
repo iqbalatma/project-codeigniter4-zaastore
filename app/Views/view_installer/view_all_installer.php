@@ -189,6 +189,104 @@
             modal.find("#id_order").val(idOrder);
         }
 
+        function filterDone(link) {
+
+            let rowThead = ` <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Kode Order</th>
+                                    <th scope="col">Pemasangan Selesai</th>
+                                    <th scope="col">Ukuran Akrilik</th>
+                                    <th scope="col">Panjang Kabel</th>
+                                    <th scope="col">Adaptor</th>
+                                    <th scope="col">Item Tambahan</th>
+                                    <th scope="col">Catatan Desain</th>
+                                    <th scope="col">Catatan Tambahan</th>
+                                    <th scope="col">Nama Installer</th>
+                                    <th scope="col">Biaya Pemasangan</th>
+                                    <th scope="col">Status</th>
+                                </tr>`;
+
+            $.ajax({
+                url: link,
+                type: "GET",
+            }).done(function(responseAjax) {
+                let tableContainer = $("#table-container");
+                tableContainer.children().remove();
+
+                let table = $("<table>", {
+                    class: "table",
+                    id: "myTable"
+                }).appendTo(tableContainer);
+
+
+                let thead = $("<thead>").append(rowThead).appendTo(table);
+                let tbody = $("<tbody>").appendTo(table);
+
+                let dataTable = $("#myTable").DataTable();
+
+                responseAjax.forEach((data, index) => {
+                    $.ajax({
+                        url: `/api/installer-name/${data.id_installer}`,
+                        type: "GET",
+                    }).done(function(installerName) {
+                        let dateInstallation = "";
+                        if (data.date_installation_done != null) {
+                            dateInstallation = data.date_installation_done
+                        }
+                        let additionalItems = "";
+                        if (data.waterproof != null) {
+                            additionalItems += "Waterproof, <br>";
+                        }
+                        if (data.adhesive != null) {
+                            additionalItems += `Perekat = ${data.adhesive},<br>`;
+                        }
+                        if (data.switch != null) {
+                            additionalItems += `Saklar = ${data.switch},<br>`;
+                        }
+                        if (data.laser_cut != null) {
+                            additionalItems += `Laser Cut,<br>`;
+                        }
+                        if (data.peniklan != null) {
+                            additionalItems += `Peniklan = ${data.peniklan},`;
+                        }
+
+
+
+                        let objectRow = [
+                            index + 1,
+                            data.order_code,
+                            dateInstallation,
+                            data.size_acrilic,
+                            data.cable_length,
+                            data.adaptor,
+                            additionalItems,
+                            data.design_notes,
+                            data.notes,
+                            installerName,
+                            intToRupiah(data.installation_price),
+                            getStatusName(data.id_status),
+                        ];
+                        dataTable.row.add(objectRow).draw();
+                    });
+                })
+
+
+                if (responseAjax.length == 0) {
+                    return Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Data tidak ditemukan !',
+                    })
+                } else {
+                    return Swal.fire(
+                        'Good job!',
+                        'Filter data berhasil !',
+                        'success'
+                    )
+                }
+            });
+        }
+
         $(".btn-edit").on("click", function() {
             onClickBtnEdit(this)
         })
@@ -317,22 +415,22 @@
             let rowThead = `<tr>
                                     <th scope="col">No</th>
                                     <th scope="col">Kode Order</th>
-                                    <th scope="col">Produksi Selesai</th>
+                                    <th scope="col">Pemasangan Selesai</th>
                                     <th scope="col">Ukuran Akrilik</th>
                                     <th scope="col">Panjang Kabel</th>
                                     <th scope="col">Adaptor</th>
                                     <th scope="col">Item Tambahan</th>
                                     <th scope="col">Catatan Desain</th>
                                     <th scope="col">Catatan Tambahan</th>
-                                    <th scope="col">Nama Teknisi</th>
-                                    <th scope="col">Harga Barang</th>
+                                    <th scope="col">Nama Installer</th>
+                                    <th scope="col">Biaya Pemasangan</th>
                                     <th scope="col">Status</th>
                                 </tr>`;
 
 
 
             $.ajax({
-                url: `/api/technician-done/monthly`,
+                url: `/api/installation-done/monthly`,
                 type: "GET",
             }).done(function(responseAjax) {
                 let tableContainer = $("#table-container");
@@ -409,7 +507,34 @@
                     )
                 }
             });
-        })
+        });
+
+        $("#btn-all-done").on("click", function() {
+            filterDone(`/api/installation-done/all`);
+        });
+
+        $("#btn-filter").on("click", function() {
+            let month = $("#month-filter").val();
+            let year = $("#year-filter").val();
+
+            if (month == null) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Bulan belum dipilih !',
+                })
+            }
+            if (year == null) {
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Tahun belum dipilih !',
+                })
+            }
+
+            filterDone(`/api/installation-done/monthly/${month}/${year}`);
+        });
+
 
 
 

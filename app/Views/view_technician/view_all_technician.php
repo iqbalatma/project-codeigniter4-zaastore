@@ -193,12 +193,6 @@
         }
 
         function filterDone(link) {
-            let btn = $(this);
-            let cb = $("#cb-done");
-            let cbRemove = $("#cb-on-progress").removeAttr("checked");
-            cb.prop("checked", true)
-
-
             let rowThead = ` <tr>
                                     <th scope="col">No</th>
                                     <th scope="col">Kode Order</th>

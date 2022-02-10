@@ -97,8 +97,8 @@ $routes->post('/technician-request-warehouse', 'Technician::request_warehouse');
 
 // INSTALLATION
 $routes->get('/installer/(:any)', 'Installer::index/$1');
-$routes->get('/installer-all/(:any)', 'Installer::all_installer/$1');
-$routes->get('/installer-by/(:any)', 'Installer::by_installer/$1');
+$routes->get('/installer-all', 'Installer::all_installer');
+$routes->get('/installer-by', 'Installer::by_installer');
 $routes->post('/installer-update-installer', 'Installer::update_installer');
 $routes->post('/installer-report-installation', 'Installer::report_installation');
 
@@ -129,8 +129,13 @@ $routes->get('/api/technician-by/(:any)/(:any)/(:any)/(:any)', 'RESTAPI\Technici
 
 // INSTALLATION
 $routes->get('/api/installation-progress', 'RESTAPI\InstallationApi::showDataOrderOnInstallation'); //on progress
-$routes->get('/api/installation-done/(:any)', 'RESTAPI\InstallationApi::showDataOrderOnInstallation/$1'); //on progress
+$routes->get('/api/installation-done/(:any)', 'RESTAPI\InstallationApi::showDataOrderOnInstallation/$1'); //on done
+$routes->get('/api/installation-done/(:any)/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderOnInstallation/$1/$2/$3'); //on done
 $routes->get('/api/installer-name/(:any)', 'RESTAPI\InstallationApi::showInstallerName/$1');
+
+$routes->get('/api/installation-by/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderByInstaller/$1/$2');
+$routes->get('/api/installation-by/(:any)/(:any)/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderByInstaller/$1/$2/$3/$4');
+$routes->get('/api/installer-users', 'RESTAPI\InstallationApi::showAllInstaller');
 
 
 /*
