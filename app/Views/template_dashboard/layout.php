@@ -174,7 +174,7 @@
                                     <?php if ($role != 4) {
                                     ?>
                                         <a class="nav-link" href="/technician-all">Tugas Semua Teknisi</a>
-                                        <a class="nav-link" href="/technician-by/done-this-month">Tugas Teknisi Perorang</a>
+                                        <a class="nav-link" href="/technician-by">Tugas Teknisi Perorang</a>
                                     <?php
                                     }; ?>
                                 </nav>
@@ -198,8 +198,8 @@
                                     }; ?>
                                     <?php if ($role != 4) {
                                     ?>
-                                        <a class="nav-link" href="/installer-all/on-progress">Tugas Semua Installer</a>
-                                        <a class="nav-link" href="/installer-by/done-this-month">Tugas Installer Perorang</a>
+                                        <a class="nav-link" href="/installer-all">Tugas Semua Installer</a>
+                                        <a class="nav-link" href="/installer-by">Tugas Installer Perorang</a>
                                     <?php }; ?>
                                 </nav>
                             </div>
