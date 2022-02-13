@@ -45,7 +45,7 @@
                                                     <td><?= $row["notes"]; ?></td>
                                                     <?php
                                                     $id_technician = $row["id_technician"];
-                                                    $technician_name = $user_technician->get_technician($id_technician);
+                                                    $technician_name = $user_technician->getNameById($id_technician);
                                                     echo "<td>";
                                                     echo ($technician_name[0]["fullname"]);
                                                     echo "</td>";
@@ -116,7 +116,7 @@
                                                     <td><?= $row["notes"]; ?></td>
                                                     <?php
                                                     $id_technician = $row["id_installer"];
-                                                    $technician_name = $user_technician->get_technician($id_technician);
+                                                    $technician_name = $user_technician->getNameById($id_technician);
                                                     echo "<td>";
                                                     echo ($technician_name[0]["fullname"]);
                                                     echo "</td>";

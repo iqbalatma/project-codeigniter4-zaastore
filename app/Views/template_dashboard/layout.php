@@ -276,12 +276,6 @@
 
 
     <script>
-        $('#id_bahan_baku').on("change", function() {
-            var dataid = $("#id_bahan_baku option:selected").attr("data-unit");
-            document.getElementById("unit").value = dataid;
-        });
-
-
         $(document).ready(function() {
             var max_fields = 10;
             var wrapper = $(".container1");

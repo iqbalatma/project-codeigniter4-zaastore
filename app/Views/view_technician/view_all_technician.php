@@ -92,35 +92,11 @@
                                             <td><?= $row["size_acrilic"]; ?></td>
                                             <td><?= $row["cable_length"]; ?></td>
                                             <td><?= $row["adaptor"]; ?></td>
-                                            <td>
-                                                <?php if ($row["waterproof"] != null) {
-                                                    echo "Waterproof, ";
-                                                    echo "<br>";
-                                                }
-                                                if ($row["adhesive"] != null) {
-                                                    echo "Perekat =  " . $row['adhesive'] . ",";
-                                                    echo "<br>";
-                                                }
-                                                if ($row["switch"] != null) {
-                                                    echo "Saklar = " . $row['switch'] . ",";
-                                                    echo "<br>";
-                                                }
-                                                if ($row["laser_cut"] != null) {
-                                                    echo "Laser Cut,";
-                                                    echo "<br>";
-                                                }
-                                                if ($row["peniklan"] != null) {
-                                                    echo "Peniklan = " . $row['peniklan'];
-                                                    echo "<br>";
-                                                }
-                                                ?>
+                                            <td><?= getAdditionalItem($row["waterproof"], $row["adhesive"], $row["switch"], $row["laser_cut"], $row["peniklan"]); ?>
                                             </td>
                                             <td><?= $row["design_notes"]; ?></td>
                                             <td><?= $row["notes"]; ?></td>
-                                            <?php
-                                            $technician_name = $user_technician->get_technician($row["id_technician"])[0]["fullname"];
-                                            echo "<td>$technician_name</td>";
-                                            ?>
+                                            <td><?= $user_technician->getNameById($row["id_technician"])[0]["fullname"]; ?></td>
                                             <td><?= intToRupiah($row["price"]); ?></td>
                                             <td><?= getStatusName($row["id_status"]); ?></td>
                                             <td>
@@ -230,7 +206,7 @@
 
                 responseAjax.forEach((data, index) => {
                     $.ajax({
-                        url: `/api/technician-name/` + data.id_technician,
+                        url: `/api/users/user-id/${data.id_technician}`,
                         type: "GET",
                     }).done(function(technicianName) {
                         let dateProduction = "";
@@ -295,8 +271,6 @@
             onClickBtnEdit(this)
         })
 
-
-
         $("#btn-done").on("click", function() {
             $("#filter-container").show();
 
@@ -343,7 +317,7 @@
 
                 responseAjax.forEach((data, index) => {
                     $.ajax({
-                        url: `/api/technician-name/` + data.id_technician,
+                        url: `/api/users/user-id/${data.id_technician}`,
                         type: "GET",
                     }).done(function(technicianName) {
                         let dateProduction = "";
@@ -457,7 +431,7 @@
 
                 responseAjax.forEach((data, index) => {
                     $.ajax({
-                        url: `/api/technician-name/` + data.id_technician,
+                        url: `/api/users/user-id/${data.id_technician}`,
                         type: "GET",
                     }).done(function(technicianName) {
                         let dateProduction = "";

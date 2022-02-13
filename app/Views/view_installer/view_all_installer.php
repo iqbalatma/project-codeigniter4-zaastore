@@ -92,30 +92,10 @@
                                             <td><?= $row["size_acrilic"]; ?></td>
                                             <td><?= $row["cable_length"]; ?></td>
                                             <td><?= $row["adaptor"]; ?></td>
-                                            <td> <?php if ($row["waterproof"] != null) {
-                                                        echo "Waterproof, ";
-                                                        echo "<br>";
-                                                    }
-                                                    if ($row["adhesive"] != null) {
-                                                        echo "Perekat =  " . $row['adhesive'] . ",";
-                                                        echo "<br>";
-                                                    }
-                                                    if ($row["switch"] != null) {
-                                                        echo "Saklar = " . $row['switch'] . ",";
-                                                        echo "<br>";
-                                                    }
-                                                    if ($row["laser_cut"] != null) {
-                                                        echo "Laser Cut,";
-                                                        echo "<br>";
-                                                    }
-                                                    if ($row["peniklan"] != null) {
-                                                        echo "Peniklan = " . $row['peniklan'];
-                                                        echo "<br>";
-                                                    }
-                                                    ?></td>
+                                            <td><?= getAdditionalItem($row["waterproof"], $row["adhesive"], $row["switch"], $row["laser_cut"], $row["peniklan"]); ?></td>
                                             <td><?= $row["design_notes"]; ?></td>
                                             <td><?= $row["notes"]; ?></td>
-                                            <td><?= $user_technician->get_technician($row["id_installer"])[0]["fullname"] ?></td>
+                                            <td><?= $user_model->getNameById($row["id_installer"])[0]["fullname"] ?></td>
                                             <td><?= intToRupiah($row["installation_price"]); ?></td>
                                             <td><?= getStatusName($row["id_status"]); ?>
                                             <td>
@@ -189,6 +169,10 @@
             modal.find("#id_order").val(idOrder);
         }
 
+        $(".btn-edit").on("click", function() {
+            onClickBtnEdit(this)
+        })
+
         function filterDone(link) {
 
             let rowThead = ` <tr>
@@ -226,7 +210,7 @@
 
                 responseAjax.forEach((data, index) => {
                     $.ajax({
-                        url: `/api/installer-name/${data.id_installer}`,
+                        url: `/api/users/user-id/${data.id_installer}`,
                         type: "GET",
                     }).done(function(installerName) {
                         let dateInstallation = "";
@@ -287,10 +271,6 @@
             });
         }
 
-        $(".btn-edit").on("click", function() {
-            onClickBtnEdit(this)
-        })
-
 
         $("#btn-on-progress").on("click", function() {
             $("#filter-container").hide();
@@ -336,7 +316,7 @@
 
                 responseAjax.forEach((data, index) => {
                     $.ajax({
-                        url: `/api/installer-name/${data.id_installer}`,
+                        url: `/api/users/user-id/${data.id_installer}`,
                         type: "GET",
                     }).done(function(installerName) {
                         let dateInstallation = "";
@@ -448,7 +428,7 @@
 
                 responseAjax.forEach((data, index) => {
                     $.ajax({
-                        url: `/api/installer-name/${data.id_installer}`,
+                        url: `/api/users/user-id/${data.id_installer}`,
                         type: "GET",
                     }).done(function(installerName) {
                         let dateInstallation = "";
