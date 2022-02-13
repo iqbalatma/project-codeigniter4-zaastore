@@ -12,18 +12,10 @@ class WarehouseTransactionModel extends Model
     protected $useAutoIncrement = true;
 
     protected $returnType     = 'array';
-    // protected $useSoftDeletes = true;
 
     protected $allowedFields = ['id_transaction', 'id_bahan_baku', 'jenis_transaksi', 'quantity', 'date', 'id_user', 'id_order'];
 
-    // protected $useTimestamps = false;
-    // protected $createdField  = 'created_at';
-    // protected $updatedField  = 'updated_at';
-    // protected $deletedField  = 'deleted_at';
 
-    // protected $validationRules    = [];
-    // protected $validationMessages = [];
-    // protected $skipValidation     = false;
 
     public function getAllData()
     {

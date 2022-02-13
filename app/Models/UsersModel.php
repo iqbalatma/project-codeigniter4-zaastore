@@ -13,11 +13,14 @@ class UsersModel extends Model
     protected $allowedFields = ['id_user', 'fullname', 'username', 'password', 'phonenumber', 'id_role', 'is_deleted'];
 
 
-    public function get_technician($id_user)
+
+
+    public function getNameById($id_user)
     {
         $builder = $this->db->table($this->table);
         $builder->select('fullname');
         $builder->where('id_user', $id_user);
+        $builder->where('is_deleted', 0);
         $query = $builder->get()->getResultArray();
         return $query;
     }

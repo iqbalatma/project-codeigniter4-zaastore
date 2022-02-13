@@ -10,7 +10,7 @@ class Technician extends BaseController
         $this->technician_model = new \App\Models\TechnicianModel();
     }
 
-    public function index($data_type = "done-this-month")
+    public function index()
     {
         $roleId = $_SESSION["role"];
         if ($roleId == 6 || $roleId == 5 || $roleId == 3 || $roleId == 1 || $roleId == 7) {
@@ -23,20 +23,9 @@ class Technician extends BaseController
 
 
 
-        $month = "";
-        $year = "";
-        if ($this->request->getGet("year") !== null) {
-            $year = $this->request->getGet("year");
-        }
-        if ($this->request->getGet("month") !== null) {
-            $month = $this->request->getGet("month");
-        }
 
-        if ($data_type == "done-this-month") {
-            $technician_done = $this->technician_model->getDataOrderForTechnicianDoneThisMonth($this->session->get("id_user"), $month, $year);
-        } else {
-            $technician_done = $this->technician_model->getDataOrderForTechnicianDone($this->session->get("id_user"));
-        }
+        $technician_done = $this->technician_model->getAllDataOrderByUserId("monthly", $this->session->get("id_user"), getMonthNow(), getYearNow());
+
 
         $data = [
             "title" => "Penugasan Teknisi",
@@ -47,9 +36,7 @@ class Technician extends BaseController
             "technician_done" => $technician_done,
             "technician_waiting_confirm" => $this->technician_model->getDataOrderForTechnicianWaitingConfirm($this->session->get("id_user")),
             "warehouse" => $this->warehouse->getAllData(),
-            "history_transaction" => $this->warehouse_transaction->getAllDataForTechnician(1),
             "history" => $this->warehouse_transaction,
-            "data_type" => $data_type,
         ];
 
 
@@ -113,14 +100,21 @@ class Technician extends BaseController
     {
         $current_time = date('Y-m-d H:i:s', time());
         $data = [
-            "id" => $this->request->getPost("id_bahan_baku"),
+            "id" => $this->request->getPost("id_bahan_baku_request"),
             "quantity" => $this->request->getPost("quantity"),
             "jenis_transaksi" => "keluar",
             "update_at" => $current_time
         ];
 
+        $dataTransaction = [
+            "id_order" => $this->request->getPost("id_order_request"),
+            "id_user" => $this->request->getPost("id_user_request"),
+            "id_bahan_baku" => $this->request->getPost("id_bahan_baku_request"),
+            "unit" => $this->request->getPost("unit"),
+            "quantity" => $this->request->getPost("quantity"),
+        ];
 
-        $query = $this->warehouse_transaction->insert($this->request->getPost());
+        $query = $this->warehouse_transaction->insert($dataTransaction);
         $query2 = $this->warehouse->updateQuantity($data);
         if ($query == true && $query2 == true) {
             $this->session->setFlashdata('msg', '<div class="alert alert-success" role="alert">

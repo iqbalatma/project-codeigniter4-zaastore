@@ -88,3 +88,25 @@ function getStatusName($idStatus)
     ];
     return $status[$idStatus];
 }
+
+function getAdditionalItem($waterproof, $adhesive, $switch, $laserCut, $peniklan)
+{
+    $additionalItem = "";
+    if ($waterproof != null) {
+        $additionalItem .= "Waterproof<br>";
+    }
+    if ($adhesive != null) {
+        $additionalItem .= "Perekat =  $adhesive,<br>";
+    }
+    if ($switch != null) {
+        $additionalItem .= "Saklar = $switch,<br>";
+    }
+    if ($laserCut != null) {
+        $additionalItem .=  "Laser Cut,<br>";
+    }
+    if ($peniklan != null) {
+        $additionalItem .= "Peniklan = $peniklan";
+    }
+
+    return $additionalItem;
+}

@@ -109,6 +109,13 @@ $routes->post('/installer-report-installation', 'Installer::report_installation'
 /**
  * RESTFULL API
  */
+
+// USERS API
+$routes->get('/api/users/role-id/(:any)', 'RESTAPI\UsersApi::showAllUsersByRoleId/$1');
+$routes->get('/api/users/user-id/(:any)', 'RESTAPI\UsersApi::showNameById/$1');
+
+
+
 // PAYMENT API
 $routes->get('/api/payment/(:any)', 'RESTAPI\PaymentApi::show/$1');
 $routes->get('/api/payment-left/(:any)', 'RESTAPI\PaymentApi::paymentLeft/$1');
@@ -118,24 +125,32 @@ $routes->get('/api/payment-paid-off/(:any)', 'RESTAPI\PaymentApi::showPaidOff/$1
 
 
 // TECHNICIAN
-$routes->get('/api/technician-progress', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician'); //on progress
-$routes->get('/api/technician-done/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1'); //done all / this month
-$routes->get('/api/technician-all-done-monthly/(:any)/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1/$2/$3'); //done monthly
-$routes->get('/api/technician-name/(:any)', 'RESTAPI\TechnicianApi::showTechnicianName/$1');
-$routes->get('/api/technician-users', 'RESTAPI\TechnicianApi::showAllTechnician');
+// for on progress data
+$routes->get('/api/technician-progress', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician');
+// for all done or done this month data
+$routes->get('/api/technician-done/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1');
+// for data selected by month and year
+$routes->get('/api/technician-all-done-monthly/(:any)/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderOnTechnician/$1/$2/$3');
+// for data by technician id
 $routes->get('/api/technician-by/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderByTechnicianId/$1/$2');
 $routes->get('/api/technician-by/(:any)/(:any)/(:any)/(:any)', 'RESTAPI\TechnicianApi::showDataOrderByTechnicianId/$1/$2/$3/$4');
 
 
 // INSTALLATION
-$routes->get('/api/installation-progress', 'RESTAPI\InstallationApi::showDataOrderOnInstallation'); //on progress
-$routes->get('/api/installation-done/(:any)', 'RESTAPI\InstallationApi::showDataOrderOnInstallation/$1'); //on done
+// for on progress data
+$routes->get('/api/installation-progress', 'RESTAPI\InstallationApi::showDataOrderOnInstallation');
+// for all done or done this month data
+$routes->get('/api/installation-done/(:any)', 'RESTAPI\InstallationApi::showDataOrderOnInstallation/$1');
+// for data selected by month and year
 $routes->get('/api/installation-done/(:any)/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderOnInstallation/$1/$2/$3'); //on done
-$routes->get('/api/installer-name/(:any)', 'RESTAPI\InstallationApi::showInstallerName/$1');
+// for data by technician id
+$routes->get('/api/installation-by/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderByInstallerId/$1/$2');
+$routes->get('/api/installation-by/(:any)/(:any)/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderByInstallerId/$1/$2/$3/$4');
 
-$routes->get('/api/installation-by/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderByInstaller/$1/$2');
-$routes->get('/api/installation-by/(:any)/(:any)/(:any)/(:any)', 'RESTAPI\InstallationApi::showDataOrderByInstaller/$1/$2/$3/$4');
-$routes->get('/api/installer-users', 'RESTAPI\InstallationApi::showAllInstaller');
+
+
+// WAREHOUSE TRANSACTION
+$routes->get('/api/warehouse-transaction/(:any)', 'RESTAPI\WarehouseTransactionApi::showAllByOrderId/$1');
 
 
 /*
