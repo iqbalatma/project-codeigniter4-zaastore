@@ -12,7 +12,8 @@ class Installer extends BaseController
 
     public function index($data_type = "done-this-month")
     {
-        if ($_SESSION["role"] == 6 || $_SESSION["role"] == 5 || $_SESSION["role"] == 3 || $_SESSION["role"] == 1 || $_SESSION["role"] == 7) {
+        $roleId = $_SESSION["role"];
+        if ($roleId == 6 || $roleId == 5 || $roleId == 3 || $roleId == 1 || $roleId == 7) {
             return redirect()->to("HttpRequest");
         }
 
