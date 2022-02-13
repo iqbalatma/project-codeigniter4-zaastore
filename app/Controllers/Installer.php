@@ -10,7 +10,7 @@ class Installer extends BaseController
         $this->installation_model = new \App\Models\InstallationModel();
     }
 
-    public function index($data_type = "done-this-month")
+    public function index()
     {
         $roleId = $_SESSION["role"];
         if ($roleId == 6 || $roleId == 5 || $roleId == 3 || $roleId == 1 || $roleId == 7) {
@@ -21,20 +21,6 @@ class Installer extends BaseController
         if ($this->session->getFlashdata('msg') !== null) {
             $flashdata = $this->session->getFlashdata('msg');
         }
-        $month = "";
-        $year = "";
-        if ($this->request->getGet("year") !== null) {
-            $year = $this->request->getGet("year");
-        }
-        if ($this->request->getGet("month") !== null) {
-            $month = $this->request->getGet("month");
-        }
-
-        if ($data_type == "done-this-month") {
-            $installation_done = $this->installation_model->getDataOrderForInstallationDoneThisMonth($this->session->get("id_user"), $month, $year);
-        } else {
-            $installation_done = $this->installation_model->getDataOrderForInstallationDone($this->session->get("id_user"));
-        }
 
         $data = [
             "title" => "Pemasangan Lampu",
@@ -42,15 +28,9 @@ class Installer extends BaseController
             "flashdata" => $flashdata,
             "session" => $this->session->get(),
             "installation" => $this->installation_model->getDataOrderForInstallation($this->session->get("id_user")),
-            "installation_done" => $installation_done,
+            "installation_done" => $this->installation_model->getDataOrderForInstallationDoneThisMonth($this->session->get("id_user"), getMonthNow(), getYearNow()),
             "installation_waiting_confirm" => $this->installation_model->getDataOrderForInstallationWaitingConfirm($this->session->get("id_user")),
-            "warehouse" => $this->warehouse->getAllData(),
-            "history_transaction" => $this->warehouse_transaction->getAllDataForTechnician(1),
-            "history" => $this->warehouse_transaction,
-            "data_type" => $data_type
         ];
-
-
         return view('view_installer/view_installer', $data);
     }
 
