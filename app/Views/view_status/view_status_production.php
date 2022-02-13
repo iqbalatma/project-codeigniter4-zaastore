@@ -38,7 +38,7 @@
                                         //memisahkan gambar jadi array
                                         $file_array = $image_design->where("is_deleted", 0)->where("id_order", $row["id_order"])->findAll();
                                         $id_technician = $row["id_technician"];
-                                        $technician_name = $technician->get_technician($id_technician)[0]["fullname"];
+                                        $technician_name = $technician->getNameById($id_technician)[0]["fullname"];
                                     ?>
                                         <tr>
                                             <th scope="row"><?= $i; ?></th>

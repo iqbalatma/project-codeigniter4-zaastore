@@ -33,7 +33,7 @@
                                     <?php $i = 1;
                                     foreach ($status as $row) :
                                         $id_installer = $row["id_installer"];
-                                        $installer_name = $installer->get_technician($id_installer)[0]["fullname"];
+                                        $installer_name = $installer->getNameById($id_installer)[0]["fullname"];
                                     ?>
                                         <tr class="">
                                             <th scope="row"><?= $i; ?></th>

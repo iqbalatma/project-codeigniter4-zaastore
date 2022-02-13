@@ -233,7 +233,7 @@
             containerCard.children().remove();
 
             $.ajax({
-                url: `/api/technician-users`,
+                url: `/api/users/role-id/4`,
                 type: "GET",
             }).done(function(responseAjax) {
                 responseAjax.forEach(technician => {
@@ -268,7 +268,7 @@
             containerCard.children().remove();
 
             $.ajax({
-                url: `/api/technician-users`,
+                url: `/api/users/role-id/4`,
                 type: "GET",
             }).done(function(responseAjax) {
                 responseAjax.forEach(technician => {

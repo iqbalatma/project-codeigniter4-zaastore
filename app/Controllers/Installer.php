@@ -91,7 +91,7 @@ class Installer extends BaseController
             "flashdata" => $flashdata,
             "session" => $this->session->get(),
             "installer" => $installer,
-            "user_technician" => $this->users_model,
+            "user_model" => $this->users_model,
             "listInstaller" => $this->users_model->where("id_role", 4)->where("is_deleted", 0)->findAll(),
         ];
 
